@@ -30,3 +30,7 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+
+# Untracked Directories
+# =====================
+TextMesh Pro/
