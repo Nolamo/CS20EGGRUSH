@@ -51,88 +51,55 @@ public class MenuManager : MonoBehaviour
         StartCoroutine(OverlayWait());
     }
 
-    public void OnSubmit()
-    {
-        Debug.Log("OnSubmit");
-        if(!GameStarted)
-        {
-            if (overlayFinished && !CoroutineStarted)
-            {
-                DoOnce();
-                StartCoroutine(DisableMenu());
-            }
-            if (endScreenViewed)
-            {
-                StartCoroutine(EndScreenFade());
-            }
-        }
-    }
-
     void Update()
     {
+        // Used on the main menu, starts the game when any button is pressed.
+        if (Input.anyKey && overlayFinished && !CoroutineStarted)
+        {
+            DoOnce();
+            StartCoroutine(DisableMenu());
+        }
+        // Used on the end screen, starts the game when any button is pressed.
+        if (Input.anyKey && endScreenViewed)
+            StartCoroutine(EndScreenFade());
+        // Pause/Unpause the game
+        if (Input.GetButtonDown("Pause"))
+            PauseMenu(GamePaused);
+
         // Timer Stuff
         {
             seconds = (int)GameTime % 60;
             minutes = (int)GameTime / 60;
             hours = (int)GameTime / 3600;
 
-            if (GameStarted)
-            {
-                GameTime += Time.unscaledDeltaTime;
-            }
-            if (minutes == 0)
-            {
-                minutesString = "00";
-            }
-            else if (minutes < 10)
-            {
-                minutesString = "0" + minutes.ToString();
-            }
-            else
-            {
-                minutesString = minutes.ToString();
-            }
-            if (minutes == 60)
-            {
-                minutesString = "00";
-            }
-            if (hours == 0)
-            {
-                hoursString = "00";
-            }
-            if (hours < 10)
-            {
-                hoursString = "0" + hours.ToString();
-            }
-            else
-            {
-                hoursString = hours.ToString();
-            }
-            if (seconds == 0)
-            {
-                secondsString = "00";
-            }
-            else if (seconds < 10)
-            {
-                secondsString = "0" + seconds.ToString();
-            }
-            else
-            {
-                secondsString = seconds.ToString();
-            }
+            if (GameStarted) GameTime += Time.unscaledDeltaTime;
+
+            // Ints to String formatting. Used for in-game timer.
+            if (minutes == 0) minutesString = "00";
+            else if (minutes < 10) minutesString = "0" + minutes.ToString();
+            else minutesString = minutes.ToString();
+            if (minutes == 60) minutesString = "00";
+            if (hours == 0) hoursString = "00";
+            if (hours < 10) hoursString = "0" + hours.ToString();
+            else hoursString = hours.ToString();
+            if (seconds == 0) secondsString = "00";
+            else if (seconds < 10) secondsString = "0" + seconds.ToString();
+            else secondsString = seconds.ToString();
         }
     }
 
+    /// <summary> called at the beginning of a coroutine, last minute patch to a bug caused by oversight and lack of planning. </summary>
     void DoOnce()
     {
         if (!CoroutineStarted)
         {
-            playerMovement.input.Gameplay.Submit.Disable();
             CoroutineStarted = true;
             menuAnimator.Play("MainMenuTrigger");
         }
     }
 
+    /// <summary> Enables the main menu. Used for reseting after credits & player death. </summary>
+    /// <param name="Died"> Death logic, only use when calling a player's death. </param>
     public IEnumerator EnableMenu(bool Died)
     {
         GameStarted = false;
@@ -166,19 +133,17 @@ public class MenuManager : MonoBehaviour
         foreach (GameObject i in waveManager.randomizer.spawnedItems)
         {
             if (i != null)
-            {
                 Destroy(i);
-            }
         }
         waveManager.curWave = 1;
         waveManager.firstWave = true;
         menuAnimator.Play("MainMenuEnable");
         playerMovement.ResetPlayer(true);
-        playerMovement.input.Gameplay.Submit.Enable();
         yield return new WaitForSeconds(2);
         CoroutineStarted = false;
     }
 
+    /// <summary> Disables the menu and starts gameplay. </summary>
     IEnumerator DisableMenu()
     {
         yield return new WaitForSeconds(1);
@@ -190,6 +155,7 @@ public class MenuManager : MonoBehaviour
         menuClass.SetActive(false);
     }
 
+    /// <summary> Credits Screen. Resets stats. </summary>
     public IEnumerator EndScreen()
     {
         menuClass.SetActive(false);
@@ -207,7 +173,6 @@ public class MenuManager : MonoBehaviour
         deathText.text = GameDeaths.ToString();
         winJingle.Play();
         menuAnimator.Play("EndScreen");
-        playerMovement.input.Gameplay.Submit.Enable();
         yield return new WaitForSeconds(3);
         endScreenViewed = true;
         hours = 0;
@@ -232,10 +197,11 @@ public class MenuManager : MonoBehaviour
         overlayFinished = true;
     }
 
-    public void PauseMenu(bool Paused)
+    /// <summary> Enables the Pause Menu when called. </summary>
+    /// <param name="Paused"> True if the game is unpaused. </param>
+    void PauseMenu(bool Paused)
     {
-        Debug.Log("OnPause");
-        if (!Paused && GameStarted)
+        if(!Paused && GameStarted)
         {
             GamePaused = true;
             GameStarted = false;
@@ -254,6 +220,7 @@ public class MenuManager : MonoBehaviour
         }
     }
 
+    /// <summary> Dampens sound effects during the duration of an audio file. </summary>
     IEnumerator MusicDampen(AudioSource audio)
     {
         jinglePlaying = true;
