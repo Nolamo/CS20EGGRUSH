@@ -19,6 +19,7 @@ ExportedObj/
 *.pdb
 *.opendb
 *.VC.db
+*.meta
 
 # Unity3D generated meta files
 *.pidb.meta
@@ -34,3 +35,8 @@ sysinfo.txt
 # Untracked Directories
 # =====================
 TextMesh Pro/
+Pixel Font - Tripfive/
+Textures/
+Audio/
+Animations/
+Prefabs/
