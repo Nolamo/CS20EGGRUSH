@@ -1,32 +1,34 @@
 ﻿using UnityEngine;
 
+// these should be indavidual classes that inheret from a base class but oh well.
+// When the player picks up a powerup, the player's associated stats are incrimented by the powerup's stats.
 public class PowerUp : MonoBehaviour
 {
     // Start is called before the first frame update
 
-    public float speedUpgrade;
-    public float jumpUpgrade;
-    public int dayDamageUpgrade;
-    public int nightDamageUpgrade;
-    public float gravityUpgrade;
-    public int dayDoubleJumpUpgrade;
-    public int nightDoubleJumpUpgrade;
-    public float blockChanceUpgrade;
-    public float cookChanceUpgrade;
-    public GameObject killEffectUpgrade;
-    public GameObject missEffectUpgrade;
-    public int healthUpgrade;
-    public float nightExtensionUpgrade;
-    public float dayExtensionUpgrade;
+    [SerializeField] float speedUpgrade;
+    [SerializeField] float jumpUpgrade;
+    [SerializeField] int dayDamageUpgrade;
+    [SerializeField] int nightDamageUpgrade;
+    [SerializeField] float gravityUpgrade;
+    [SerializeField] int dayDoubleJumpUpgrade;
+    [SerializeField] int nightDoubleJumpUpgrade;
+    [SerializeField] float blockChanceUpgrade;
+    [SerializeField] float cookChanceUpgrade;
+    [SerializeField] GameObject killEffectUpgrade; // unused powerup we didn't have time to implement
+    [SerializeField] GameObject missEffectUpgrade; // ""
+    [SerializeField] int healthUpgrade;
+    [SerializeField] float nightExtensionUpgrade;
+    [SerializeField] float dayExtensionUpgrade;
 
-    public int healAmount;
+    [SerializeField] int healAmount;
 
-    public string itemTitle;
+    public string itemTitle; // only ones other scripts need
     public string itemDesc;
 
-    public GameObject takeEffect;
+    [SerializeField] GameObject takeEffect; // poofs
 
-    // Update is called once per frame
+    // increment stats
     public void TakePowerUp(PlayerMovement player)
     {
         player.speed += speedUpgrade;
@@ -43,19 +45,14 @@ public class PowerUp : MonoBehaviour
         player.dayNight.nightSpeed -= nightExtensionUpgrade;
 
         if (killEffectUpgrade)
-        {
             player.killEffect.Add(killEffectUpgrade);
-        }
 
         if (missEffectUpgrade)
-        {
             player.missEffect.Add(missEffectUpgrade);
-        }
 		
+        // foods
 		if (healAmount > 0)
-		{
 			player.hp.Heal(healAmount);
-		}
 
         Instantiate(takeEffect, transform.position, Quaternion.identity);
         Destroy(gameObject);

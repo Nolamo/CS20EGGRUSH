@@ -4,6 +4,8 @@
 /// random Unity editor glitching has occured and all inspector windows are unresponsive.
 /// It's important that FixDeadInspector window be visible somewhere in the Editor for this to work!
 /// </summary>
+
+// this fixes a semi-frequent bg in older versions of unity with inspector windows. Not a gameplay script.
 #if UNITY_EDITOR
 using System;
 using System.Reflection;

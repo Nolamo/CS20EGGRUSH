@@ -1,7 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
+/// <summary> Long ranged attacker that uses eggs in order to attack enemies. Walks up the the nearest ledge, and begins firing. </summary>
 public class Duck : MonoBehaviour
 {
     public float speed;
@@ -22,7 +21,7 @@ public class Duck : MonoBehaviour
 
     public LayerMask whatIsWall;
 
-    public EnemyHealth hp;
+    public EnemyHealth health;
     RaycastHit2D hit;
     RaycastHit2D slopeHit;
     RaycastHit2D LedgeHit;
@@ -33,11 +32,8 @@ public class Duck : MonoBehaviour
     float fireDelay;
     public Transform fireDirection;
     public bool firing;
-
-
     bool detectingSlope;
 
-    // Start is called before the first frame update
     void Start()
     {
         fireDelay = fireTime;
@@ -48,80 +44,67 @@ public class Duck : MonoBehaviour
         LedgeHit = Physics2D.Raycast(ledgeRayOrigin.position, -Vector2.up, 0.25f, whatIsWall);
     }
 
-    // Update is called once per frame
     void Update()
     {
         LedgeHit = Physics2D.Raycast(ledgeRayOrigin.position, -Vector2.up, 0.4f, whatIsWall);
-
         firing = LedgeHit.collider == null;
 
+        // if the duck is in the proice of firing, fire
         if (firing)
         {
-            hp.rb.constraints = RigidbodyConstraints2D.FreezeAll;
-
+            health.rb.constraints = RigidbodyConstraints2D.FreezeAll;
             anim.SetBool("Firing", true);
-
             fireDelay -= Time.deltaTime;
 
             if(fireDelay <= 0)
-            {
                 Fire();
-            }
         }
 
-        stunned = hp.stunned > 0;
+        stunned = health.stunned > 0;
 
-        if (hp.facingLeft && !stunned && !firing)
+        // collision detection.
+        if (health.facingLeft && !stunned && !firing)
         {
             flippingTransforms.localScale = new Vector3(-1, 1, 1);
-            hp.rb.velocity = new Vector2(-speed, hp.rb.velocity.y);
+            health.rb.velocity = new Vector2(-speed, health.rb.velocity.y);
             hit = Physics2D.Raycast(rayOrigin.position, -Vector2.right, raycastDistance, whatIsWall);
         }
         else if (!stunned && !firing)
         {
             flippingTransforms.localScale = new Vector3(1, 1, 1);
-            hp.rb.velocity = new Vector2(speed, hp.rb.velocity.y);
+            health.rb.velocity = new Vector2(speed, health.rb.velocity.y);
             hit = Physics2D.Raycast(rayOrigin.position, Vector2.right, raycastDistance, whatIsWall);
         }
 
-        if (hp.facingLeft && !stunned && detectingSlope && !firing)
-        {
+        if (health.facingLeft && !stunned && detectingSlope && !firing)
             slopeHit = Physics2D.Raycast(slopeRayOrigin.position, -Vector2.right, slopeCastDistance, whatIsWall);
-        }
         else if (!stunned && detectingSlope && !firing)
-        {
             slopeHit = Physics2D.Raycast(slopeRayOrigin.position, Vector2.right, slopeCastDistance, whatIsWall);
-        }
 
         if (stunned)
-        {
             anim.SetBool("stunned", true);
-        }
 
         if (slopeHit.collider == null)
-        {
-            hp.rb.gravityScale = slopeGravity;
-        }
+            health.rb.gravityScale = slopeGravity;
         else
-        {
-            hp.rb.gravityScale = defaultGravity;
-        }
+            health.rb.gravityScale = defaultGravity;
 
         if (hit.collider != null)
         {
-            if (hp.facingLeft)
+            if (health.facingLeft)
             {
-                hp.facingLeft = false;
+                health.facingLeft = false;
                 sprite.flipX = false;
             }
             else
             {
-                hp.facingLeft = true;
+                health.facingLeft = true;
                 sprite.flipX = true;
             }
         } 
     }
 
+    // shoot :)
     void Fire()
     {
         anim.Play("Fire");
@@ -130,12 +113,12 @@ public class Duck : MonoBehaviour
         Instantiate(projectile, fireDirection.position, fireDirection.rotation);
     }
 
-
+    // dev gizmos
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
 
-        if (hp.facingLeft)
+        if (health.facingLeft)
         {
             Gizmos.DrawRay(rayOrigin.position, -Vector2.right);
             Gizmos.DrawRay(slopeRayOrigin.position, -Vector2.right);

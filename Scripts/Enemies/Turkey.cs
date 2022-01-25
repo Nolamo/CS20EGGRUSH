@@ -1,7 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
+/// <summary> A tougher ground unit. When startled, it flails around in the air. </summary>
 public class Turkey : MonoBehaviour
 {
     public float jumpTimer;
@@ -42,12 +41,21 @@ public class Turkey : MonoBehaviour
         slopeHit = Physics2D.Raycast(slopeRayOrigin.position, Vector2.right, slopeCastDistance, whatIsWall);
     }
 
-    // Update is called once per frame
+    // jumps periodically when startled
+    void Jump()
+    { Jump(jumpForce); }
+    void Jump(float jumpForce)
+    {
+        jumpDelay = jumpTimer;
+        hp.rb.AddForce(Vector2.up * jumpForce);
+        Instantiate(jumpEffect, transform.position, Quaternion.identity);
+    }
+
     void Update()
     {
-
         stunned = hp.stunned > 0;
 
+        // movement is identical to the chicken.
         if (hp.facingLeft && !stunned)
         {
             hp.rb.velocity = new Vector2(-speed, hp.rb.velocity.y);
@@ -74,32 +82,26 @@ public class Turkey : MonoBehaviour
         {
             anim.SetBool("Startled", true);
 
+            // set speed to startledSpeed.
             speed = startledSpeed;
 
+            // periodically jump while startled
             if (!stunned)
             {
                 jumpDelay -= Time.deltaTime;
                 if(jumpDelay <= 0)
-                {
                     Jump(jumpForce);
-                }
             }
         }
 
         if (stunned)
-        {
             anim.SetBool("stunned", true);
-        }
-
         if (slopeHit.collider == null)
-        {
             hp.rb.gravityScale = slopeGravity;
-        }
         else
-        {
             hp.rb.gravityScale = defaultGravity;
-        }
 
+        // if it has hit something, turn around, and jump.
         if (hit.collider != null)
         {
             if (hp.facingLeft)
@@ -113,15 +115,14 @@ public class Turkey : MonoBehaviour
                 sprite.flipX = true;
             }
             if (startled)
-            {
                 Jump(jumpForce);
-            }
         } 
     }
+
+    // unity dev gizmos
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-
         if (hp.facingLeft)
         {
             Gizmos.DrawRay(rayOrigin.position, -Vector2.right);
@@ -132,20 +133,10 @@ public class Turkey : MonoBehaviour
             Gizmos.DrawRay(rayOrigin.position, Vector2.right);
             Gizmos.DrawRay(slopeRayOrigin.position, Vector2.right);
         }
-
-        
-
     }
 
     private void OnCollisionStay2D(Collision2D collision)
     {
         detectingSlope = collision != null;
-    }
-
-    void Jump(float jumpForce)
-    {
-        jumpDelay = jumpTimer;
-        hp.rb.AddForce(Vector2.up * jumpForce);
-        Instantiate(jumpEffect, transform.position, Quaternion.identity);
     }
 }

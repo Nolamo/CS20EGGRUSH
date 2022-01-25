@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Sets velocity of an object, used to spawn the duck egg at the intened velocity. Could have been done better.
 public class velocitySetter : MonoBehaviour
 {
     // Start is called before the first frame update

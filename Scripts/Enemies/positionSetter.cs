@@ -1,7 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
+// Moves an object to specified place. Likely used on duck but I forget.
 public class positionSetter : MonoBehaviour
 {
     public Transform parent;

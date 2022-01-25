@@ -20,8 +20,8 @@ public class DayNight : MonoBehaviour
     public AudioSource dayMusic;
     public AudioSource nightMusic;
 
-    [SerializeField] private AudioRandomizer dayThemeRandomizer;
-    [SerializeField] private AudioRandomizer nightThemeRandomizer;
+    [SerializeField] AudioRandomizer dayThemeRandomizer;
+    [SerializeField] AudioRandomizer nightThemeRandomizer;
 
     public AudioSource dayDeathJingle;
     public AudioSource nightDeathJingle;
@@ -49,15 +49,13 @@ public class DayNight : MonoBehaviour
         nightMusic = nightThemeRandomizer.audioSource;
     }
 
-    // Update is called once per frame
+    // Progresses through the day and night cycle.
     void Update()
     {
         isNotDay = time > cycleTime / 4 * 1 && time < cycleTime / 4 * 3;
 
         if(time >= cycleTime)
-        {
             time = 0;
-        }
 
         if (!isNotDay)
         {
@@ -72,21 +70,18 @@ public class DayNight : MonoBehaviour
             dayMusic = dayThemeRandomizer.audioSource;
         }
 
+        // modify day/night sprites colours based on time of day as dictated by the animation curve.
         for (int i = 0; i < daySprites.Length; i++)
-        {
             daySprites[i].color = DayGradient.Evaluate(time / cycleTime);
-        }
-
         for (int i = 0; i < nightSprites.Length; i++)
-        {
             nightSprites[i].color = NightGradient.Evaluate(time / cycleTime);
-        }
 
         MusicAdjustment(menuManager.jinglePlaying);
 
         CelestialBodies.rotation = Quaternion.Euler(0, 0, -time / cycleTime * 360);
     }
 
+    // fade the music/death jingles in and out on day/night transitions. Each track has the same melody so it's a smooth transition.
     public void MusicAdjustment(bool deathJingle)
     {
         if(!deathJingle)

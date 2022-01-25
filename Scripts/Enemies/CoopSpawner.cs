@@ -1,16 +1,13 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary> Generic enemy spawner. </summary>
 public class CoopSpawner : MonoBehaviour
 {
 
     public Transform spawnpoint;
-    //public float time = 2;
-
     public GameObject[] enemies;
 
-    // Start is called before the first frame update
     void Start()
     {
 
@@ -18,11 +15,11 @@ public class CoopSpawner : MonoBehaviour
 
     }
 
+    // Spawns enemies in cue every 2-4 seconds.
     IEnumerator SpawnEnemy()
     {
-
+        // if there are more than 10 enemies on screen, stop spawning until there's less than 10.
         GameObject[] count = GameObject.FindGameObjectsWithTag("Enemy");
-
         if (count.Length >= 10)
         {
             StartCoroutine(CountEnemies());
@@ -31,10 +28,7 @@ public class CoopSpawner : MonoBehaviour
         else if (count.Length <= 10)
         {
             Vector3 spawn = spawnpoint.transform.position;
-
-
             Instantiate(enemies[Random.Range(0, enemies.Length)], spawn, Quaternion.identity);
-
             yield return new WaitForSeconds(Random.Range(2f, 4f));
             StartCoroutine(SpawnEnemy());
         }
@@ -42,9 +36,9 @@ public class CoopSpawner : MonoBehaviour
 
     }
 
+    // what to do while waiting to spawn enemies.
     IEnumerator CountEnemies()
     {
-
         GameObject[] count = GameObject.FindGameObjectsWithTag("Enemy");
 
         if (count.Length <= 8)
@@ -54,10 +48,8 @@ public class CoopSpawner : MonoBehaviour
         }
         else
         {
-
             yield return new WaitForSeconds(1f);
             StartCoroutine(CountEnemies());
-
         }
 
     }

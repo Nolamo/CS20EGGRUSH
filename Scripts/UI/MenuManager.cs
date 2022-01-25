@@ -180,6 +180,7 @@ public class MenuManager : MonoBehaviour
         seconds = 0;
     }
 
+    /// <summary> Fades out the Endscreen. Triggered when the player presses any button during the endscreen. </summary>
     IEnumerator EndScreenFade()
     {
         endScreenViewed = false;
@@ -190,6 +191,7 @@ public class MenuManager : MonoBehaviour
         StartCoroutine(EnableMenu(false));
     }
 
+    /// <summary> Fade from black Overlay. </summary>
     IEnumerator OverlayWait()
     {
         yield return new WaitForSeconds(2);

@@ -1,13 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
+/// <summary> A simple Enemy that just strolls back and forwards. Startles when it takes damage. </summary>
 public class Chicken : MonoBehaviour
 {
     public float speed;
     public float startledSpeed;
     Animator anim;
-    public bool startled;
+    bool startled;
     bool stunned;
     public float raycastDistance;
     public Transform rayOrigin;
@@ -21,13 +20,12 @@ public class Chicken : MonoBehaviour
 
     public LayerMask whatIsWall;
 
-    public EnemyHealth hp;
+    public EnemyHealth health;
     RaycastHit2D hit;
     RaycastHit2D slopeHit;
 
     bool detectingSlope;
 
-    // Start is called before the first frame update
     void Start()
     {
         
@@ -36,75 +34,68 @@ public class Chicken : MonoBehaviour
         slopeHit = Physics2D.Raycast(slopeRayOrigin.position, Vector2.right, slopeCastDistance, whatIsWall);
     }
 
-    // Update is called once per frame
     void Update()
     {
+        stunned = health.stunned > 0;
 
-
-        stunned = hp.stunned > 0;
-
-        if (hp.facingLeft && !stunned)
+        // movement code, if stunned, stop movement temporarily.
         {
-            hp.rb.velocity = new Vector2(-speed, hp.rb.velocity.y);
+        if (health.facingLeft && !stunned)
+        {
+            health.rb.velocity = new Vector2(-speed, health.rb.velocity.y);
             hit = Physics2D.Raycast(rayOrigin.position, -Vector2.right, raycastDistance, whatIsWall);
         }
         else if (!stunned)
         {
-            hp.rb.velocity = new Vector2(speed, hp.rb.velocity.y);
+            health.rb.velocity = new Vector2(speed, health.rb.velocity.y);
             hit = Physics2D.Raycast(rayOrigin.position, Vector2.right, raycastDistance, whatIsWall);
         }
-
-        if (hp.facingLeft && !stunned && detectingSlope)
-        {
+        if (health.facingLeft && !stunned && detectingSlope)
             slopeHit = Physics2D.Raycast(slopeRayOrigin.position, -Vector2.right, slopeCastDistance, whatIsWall);
-        }
         else if (!stunned && detectingSlope)
-        {
-            slopeHit = Physics2D.Raycast(slopeRayOrigin.position, Vector2.right, slopeCastDistance, whatIsWall);
-        }
-
-        startled = hp.health < hp.maxHealth;
+            slopeHit = Physics2D.Raycast(slopeRayOrigin.position, Vector2.right, slopeCastDistance, whatIsWall); }
+        
+        // would be an auto-property/anon function in unity 2020
+        // ex. bool startled -> health.health < health.maxHealth;
+        startled = health.health < health.maxHealth;
 
         if(startled)
         {
+            // if startled, change speed to startledSpeed and switch to startle animation.
             anim.SetBool("Startled", true);
-
             speed = startledSpeed;
         }
 
         if (stunned)
-        {
             anim.SetBool("stunned", true);
-        }
 
         if (slopeHit.collider == null)
-        {
-            hp.rb.gravityScale = slopeGravity;
-        }
+            health.rb.gravityScale = slopeGravity;
         else
-        {
-            hp.rb.gravityScale = defaultGravity;
-        }
+            health.rb.gravityScale = defaultGravity;
 
+        // if hits a wall, turn around.
         if (hit.collider != null)
         {
-            if (hp.facingLeft)
+            if (health.facingLeft)
             {
-                hp.facingLeft = false;
+                health.facingLeft = false;
                 sprite.flipX = false;
             }
             else
             {
-                hp.facingLeft = true;
+                health.facingLeft = true;
                 sprite.flipX = true;
             }
         } 
     }
+
+    // unity dev gizmos
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
 
-        if (hp.facingLeft)
+        if (health.facingLeft)
         {
             Gizmos.DrawRay(rayOrigin.position, -Vector2.right);
             Gizmos.DrawRay(slopeRayOrigin.position, -Vector2.right);

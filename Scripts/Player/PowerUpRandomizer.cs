@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class PowerUpRandomizer : MonoBehaviour
@@ -14,8 +13,10 @@ public class PowerUpRandomizer : MonoBehaviour
 
     bool itemsSpawned;
 
+
     private void Update()
     {
+        // check if there are changes in the list, if so, clear list.
         if (itemsSpawned)
         {
             foreach(GameObject b in spawnedItems)
@@ -27,9 +28,7 @@ public class PowerUpRandomizer : MonoBehaviour
                     for (int i = 0; i < items.ToArray().Length; i++)
                     {
                         if(items[i].name == b.name)
-                        {
                             items.RemoveAt(i);
-                        }
                     }
 
                     itemsSpawned = false;
@@ -38,6 +37,7 @@ public class PowerUpRandomizer : MonoBehaviour
         }
     }
 
+    /// <summary> When called, clear items that remain. Primarily called when the player picks a PowerUp to clear out other choices. </summary>
     public void ClearItems()
     {
         mngr.playAutomatically = true;
@@ -53,6 +53,7 @@ public class PowerUpRandomizer : MonoBehaviour
         spawnedItems.Clear();
     }
 
+    /// <summary> Spawns a random item from the item pool. </summary>
     public void Randomize()
     {
         for (int i = 0; i < slots.Length; i++)

@@ -22,10 +22,10 @@ public class BasicAnimator : MonoBehaviour
     void Start()
     {
         totalFrames = data.frames.Count;
-        if (totalFrames == 0) playing = false;// sanity check
+        if (totalFrames == 0) 
+            playing = false;// sanity check
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (playing)
@@ -34,16 +34,14 @@ public class BasicAnimator : MonoBehaviour
             frame += Time.deltaTime * data.frameRate;
             if (frame >= totalFrames)
             {
-                //deletes component once animation is finished if component isn't intended to loop animation.
-                //DELETES COMPONENT NOT GAMEOBJECT.
+                //deletes script once animation is finished if script isn't intended to loop animation.
                 frame -= totalFrames;
                 if (!looped)
                 {
                     playing = false;
                     if (disableOnEnd)
-                    {
                         Destroy(this);
-                    }
+
                     return;
                 }
             }
@@ -57,12 +55,11 @@ public class BasicAnimator : MonoBehaviour
 
     public void Play()
     {
-        //sets the frame to the first frame in list
         frame = 0;
         playing = true;
     }
-
-    void Play(Data data)
+    // overload
+    public void Play(Data data)
     {
         this.data = data;
         totalFrames = data.frames.Count;
@@ -71,6 +68,7 @@ public class BasicAnimator : MonoBehaviour
         if (totalFrames == 0) playing = false;// sanity check
     }
 
+    // Holds a list of sprites and intented framerate.
     [System.Serializable]
     public class Data
     {

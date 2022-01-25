@@ -52,15 +52,18 @@ public class Health : MonoBehaviour
             sprite.gameObject.SetActive(true);
     }
 
+    /// <summary> Deal damage to the entity. </summary>
+    /// <param name="amount"> The amount of damage to deal. </param>
     public void Damage(int amount)
     {
         if(playerMovement.menuManager.GameStarted)
         {
             if (invincibility <= 0)
             {
+                // If the player has a higher block chance, deal no damage. Otherwise, deal damage.
+                // This does allow for the player to become invincible if they get very lucky.
                 if (Random.Range(0f, 1f) > blockChance)
                 {
-
                     hp -= amount;
                     hp = Mathf.Clamp(hp, 0, maxHp);
                     playerMovement.menuManager.damageTaken += 1;
