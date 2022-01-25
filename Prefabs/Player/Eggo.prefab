@@ -5005,7 +5005,6 @@ GameObject:
   - component: {fileID: 8433217291588217763}
   - component: {fileID: 8433217291588217762}
   - component: {fileID: 8433217291588217765}
-  - component: {fileID: 6487660051959613356}
   m_Layer: 14
   m_Name: Eggo
   m_TagString: Player
@@ -5083,7 +5082,7 @@ MonoBehaviour:
   nightDamageUpgrade: 0
   titleText: {fileID: 0}
   descText: {fileID: 0}
-  p: {fileID: 0}
+  PowerUp: {fileID: 0}
   eye: {fileID: 2462815401947050345}
   attackEffects: {fileID: 7413841970267184134}
   eyeOpen: {fileID: 8413543068511945284, guid: a19769c03cf4add429c38b5896577cba, type: 3}
@@ -5119,12 +5118,6 @@ MonoBehaviour:
   invincibilityBlink: 0.1
   screenShakeDuration: 0.1
   screenShakeMagnitude: 0.15
-  healthSprites:
-  - {fileID: 8058421371750846814, guid: a19769c03cf4add429c38b5896577cba, type: 3}
-  - {fileID: -2562917041285733287, guid: a19769c03cf4add429c38b5896577cba, type: 3}
-  - {fileID: -703277059902294303, guid: a19769c03cf4add429c38b5896577cba, type: 3}
-  - {fileID: -6642319657363822590, guid: a19769c03cf4add429c38b5896577cba, type: 3}
-  - {fileID: 968295432110910151, guid: a19769c03cf4add429c38b5896577cba, type: 3}
 --- !u!58 &8433217291588217762
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -5162,79 +5155,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 0
---- !u!114 &6487660051959613356
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8433217291588217764}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: 3d898c1e9f7f56549a67c1fbc7bc9fa5,
-    type: 3}
-  m_NotificationBehavior: 0
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 8433217291588217764}
-        m_MethodName: 
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents:
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: Move
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: 8974a83c-7eaa-4a7a-a26f-269e152d5e38
-    m_ActionName: Gameplay/Move[/XInputControllerWindows/dpad,/XInputControllerWindows/leftStick,/XInputControllerWindows/rightStick,/Keyboard/a,/Keyboard/d,/Keyboard/leftArrow,/Keyboard/anyKey]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 8199e1a0-19ae-464d-9686-949df274e66f
-    m_ActionName: Gameplay/Jump[/Keyboard/w,/Keyboard/upArrow,/Keyboard/space,/XInputControllerWindows/leftStick/up,/XInputControllerWindows/dpad/up,/XInputControllerWindows/rightStick/up,/XInputControllerWindows/buttonSouth,/XInputControllerWindows/buttonWest]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 10367557-b2da-47f2-a700-892beb94bee5
-    m_ActionName: Gameplay/Attack[/Keyboard/s,/Keyboard/downArrow,/Keyboard/shift,/Keyboard/ctrl,/Keyboard/alt,/XInputControllerWindows/leftStick/down,/XInputControllerWindows/dpad/down,/XInputControllerWindows/rightStick/down,/XInputControllerWindows/buttonEast,/XInputControllerWindows/buttonNorth]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 6de7ef56-f495-45d7-b6e9-c157fc6cce2b
-    m_ActionName: Gameplay/Pause[/Keyboard/escape,/XInputControllerWindows/start,/XInputControllerWindows/select,/XInputControllerWindows/start]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 1bdf6cd5-fb9a-481e-a089-f0ec123dcfb8
-    m_ActionName: Gameplay/Submit[/Keyboard/anyKey,/XInputControllerWindows/leftStickPress,/XInputControllerWindows/rightStickPress,/XInputControllerWindows/leftTrigger,/XInputControllerWindows/rightTrigger,/XInputControllerWindows/leftShoulder,/XInputControllerWindows/rightShoulder,/XInputControllerWindows/buttonEast,/XInputControllerWindows/buttonNorth,/XInputControllerWindows/buttonSouth,/XInputControllerWindows/buttonWest,/XInputControllerWindows/dpad/down,/XInputControllerWindows/dpad/left,/XInputControllerWindows/dpad/right,/XInputControllerWindows/dpad/up,/XInputControllerWindows/leftStick/down,/XInputControllerWindows/leftStick/left,/XInputControllerWindows/leftStick/right,/XInputControllerWindows/leftStick/up,/XInputControllerWindows/rightStick/down,/XInputControllerWindows/rightStick/left,/XInputControllerWindows/rightStick/right,/XInputControllerWindows/rightStick/up,/XInputControllerWindows/start,/XInputControllerWindows/select,/XInputControllerWindows/start]
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: Keyboard
-  m_DefaultActionMap: Gameplay
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
 --- !u!1 &8433217293373631685
 GameObject:
   m_ObjectHideFlags: 0
