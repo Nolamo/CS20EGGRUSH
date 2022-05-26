@@ -105,9 +105,6 @@ public class Chicken : MonoBehaviour
             Gizmos.DrawRay(rayOrigin.position, Vector2.right);
             Gizmos.DrawRay(slopeRayOrigin.position, Vector2.right);
         }
-
-        
-
     }
 
     private void OnCollisionStay2D(Collision2D collision)
